@@ -5,12 +5,24 @@ BOARD ?= virt
 
 # Settings depending on BOARD
 ifeq ($(BOARD),virt)
+	BSP				= virt
 	TARGET			= riscv64gc-unknown-none-elf
 	ARCH			= riscv64gc
 	LINKER_SCRIPT	= src/bsp/virt/link.ld
 	QEMU_BIN		= qemu-system-riscv64
 	QEMU_MACHINE	= virt
 	QEMU_ARGS		= -cpu rv64 -smp 4 -m 128M -display none -bios none
+	QEMU_DEVICES	= -serial stdio
+endif
+
+ifeq ($(BOARD),virt32)
+	BSP				= virt
+	TARGET			= riscv32i-unknown-none-elf
+	ARCH			= riscv32i
+	LINKER_SCRIPT	= src/bsp/virt/link.ld
+	QEMU_BIN		= qemu-system-riscv32
+	QEMU_MACHINE	= virt
+	QEMU_ARGS		= -cpu rv32 -smp 4 -m 128M -display none -bios none
 	QEMU_DEVICES	= -serial stdio
 endif
 
@@ -22,7 +34,7 @@ RUSTFLAGS		= -C link-arg=-T$(LINKER_SCRIPT) -D warnings -D missing_docs
 QUICKRUSTFLAGS	= -C link-arg=-T$(LINKER_SCRIPT)
 
 COMPILER_ARGS 	= --target=$(TARGET) 		\
-	--features bsp_$(BOARD),arch_$(ARCH)	\
+	--features bsp_$(BSP),arch_$(ARCH)	\
 	--release
 
 # the commands that can be run

@@ -14,3 +14,4 @@ default = []
 bsp_virt = []
 # CPU Selection
 arch_riscv64gc = []
+arch_riscv32i = []
